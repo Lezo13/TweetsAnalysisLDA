@@ -92,7 +92,7 @@ def getAllTweets():
 
     if os.path.exists(fullPathJson):
         os.remove(fullPathJson)
-        os.system("snscrape --jsonl --max-results 500 twitter-search " + query + " > " + fullPathJson)
+    os.system("snscrape --jsonl --max-results 500 twitter-search " + query + " > " + fullPathJson)
 
     # Tweets Data conversion to CSV
     if os.path.exists(fullPathJson):
@@ -116,7 +116,6 @@ def getAllTweets():
         if os.path.exists(fullPathArchiveCsv):
             os.remove(fullPathArchiveCsv)
         tweets_df.to_csv(fullPathArchiveCsv)
-
 
 
     # CSV Generation of REAL DATA
@@ -202,8 +201,14 @@ def main_window():
         window.start_gui()
 
     def view_full():
-        path = pathDir + '\\data\\tweets_data.csv'
-        os.startfile(path)
+        dirName = '\\data\\'
+        fileName = 'tweets_data.csv'
+        fullpath = pathDir + dirName + fileName
+
+        if os.path.exists(fullpath):
+            os.startfile(fullpath)
+        else :
+            messagebox.showerror("ERROR", "Missing CSV File. Generate first!", icon='error')
 
     # Main Content
     input_lbl = Label(root,text="INPUT TWEET", fg="#700700", bg=bgcolor)
@@ -217,7 +222,7 @@ def main_window():
     button_generate = Button(root, text="GENERATE", borderwidth=5, bg=button_color,
                              height=2, width=20, command=generate)
     button_generate.config(font='Helvetica 11 bold')
-    button_generate.place(x=50,y=210)
+    button_generate.place(x=50,y=260)
 
     # Button's Tool tip message
     btn_generate_message = "Fetch all tweets from @" + user_target + \
@@ -229,7 +234,7 @@ def main_window():
     button_clear = Button(root, text="CLEAR", borderwidth=5, bg=button_color,
                           height=2, width=20, command=clear)
     button_clear.config(font='Helvetica 11 bold')
-    button_clear.place(x=50, y=310)
+    button_clear.place(x=50, y=360)
 
     # Button's Tool tip message
     btn_clear_message = "Cleans up any shown data \non the canvas"
@@ -240,7 +245,7 @@ def main_window():
     button_display = Button(root, text="DISPLAY", borderwidth=5, bg=button_color,
                             height=2, width=20, command=display)
     button_display.config(font='Helvetica 11 bold')
-    button_display.place(x=50, y=410)
+    button_display.place(x=50, y=460)
 
     # Button's Tool tip message
     btn_display_message = "Opens up the output window"
@@ -248,20 +253,10 @@ def main_window():
     tip_display = Pmw.Balloon(root)
     tip_display.bind(button_display, btn_display_message)
 
-    button_view = Button(root, text="VIEW FULL DATA (CSV)", borderwidth=5, bg=button_color,
-                            height=2, width=20, command=view_full)
-    button_view.config(font='Helvetica 11 bold')
-    button_view.place(x=50, y=510)
-
-    # Button's Tool tip message
-    btn_view_message = "Opens up the csv file \nto show all fetched tweet data"
-    # bind tool tip to button
-    tip_view = Pmw.Balloon(root)
-    tip_view.bind(button_view, btn_view_message)
-
     # Menu Bar
     menubar = Menu(root)
     filemenu = Menu(menubar, tearoff=0)
+    filemenu.add_command(label="View Full Data (CSV)", command=lambda: view_full())
     filemenu.add_command(label="Settings", command=lambda: openDateDialog())
     filemenu.add_separator()
     filemenu.add_command(label="Exit", command=exit)
@@ -281,8 +276,9 @@ def main_window():
     outer_container2 = Frame(wholecontent2, bg=inner_color,height=330)
     outer_container2.pack()
 
-    content_lbl_temp = Label(outer_container, bg=inner_color, fg='#700700', text="(FIRST " + str(display_count) +") TWEETS WITHIN THE DURATION",
-                        height=2, justify=LEFT, anchor="w")
+    content_lbl_temp = Label(outer_container, bg=inner_color, fg='#700700',
+                             text="(FIRST " + str(display_count) + ") TWEETS WITHIN THE DURATION",
+                             height=2, justify=LEFT, anchor="w")
     content_lbl_temp.config(font='Tahoma 11 bold')
     content_lbl_temp.pack(padx=10, fill=BOTH)
     content_lbl2_temp = Label(outer_container2, bg=inner_color, fg='#700700', text="PRE PROCESS WORDS",
@@ -315,7 +311,7 @@ def main_window():
         clear_frame(outer_container2)
 
         content_lbl = Label(outer_container, bg=inner_color, fg='#700700',
-                            text="(TOP " + str(display_count) + ") TWEETS WITHIN THE DURATION",
+                            text="(FIRST " + str(display_count) + ") TWEETS WITHIN THE DURATION",
                             height=2, justify=LEFT, anchor="w")
         content_lbl.config(font='Tahoma 11 bold')
         content_lbl.pack(padx=10, fill=BOTH)
