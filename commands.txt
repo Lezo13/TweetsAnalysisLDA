@@ -1,5 +1,7 @@
 Install packages:
 pip install -r requirements.txt
+pip install git+https://github.com/JustAnotherArchivist/snscrape.git
+
 
 Create Packages (Use this when new packages are added):
 pip freeze > requirements.txt
