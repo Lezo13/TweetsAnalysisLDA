@@ -2,8 +2,9 @@
 
 Requirements:
 
-Python 3.9
-Pycharm IDE
+[x] Git
+[x] Python 3.9
+[x] Pycharm IDE
 
 
 How to run?:
